@@ -1,0 +1,56 @@
+"use client";
+
+import { useActionState, useState } from "react";
+import { addMember } from "@/actions/project";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { UserPlus } from "lucide-react";
+
+export function AddMemberDialog({ projectId }: { projectId: string }) {
+  const [open, setOpen] = useState(false);
+  const addMemberWithId = addMember.bind(null, projectId);
+  const [state, action, pending] = useActionState(addMemberWithId, {});
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger
+        render={
+          <Button variant="outline" size="sm" className="gap-2">
+            <UserPlus className="size-4" />
+            Invite
+          </Button>
+        }
+      />
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Invite member</DialogTitle>
+          <DialogDescription>
+            Invite by email. They must already have an account.
+          </DialogDescription>
+        </DialogHeader>
+        <form action={action} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input id="email" name="email" type="email" required />
+          </div>
+          {state.error && <p className="text-sm text-destructive">{state.error}</p>}
+          <DialogFooter>
+            <Button type="submit" disabled={pending}>
+              {pending ? "Inviting…" : "Invite"}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
