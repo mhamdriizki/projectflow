@@ -1,3 +1,4 @@
+import { Header } from "@/components/layout/header";
 import { Sidebar } from "@/components/layout/sidebar";
 import { requireSession } from "@/lib/session";
 
@@ -13,7 +14,7 @@ export default async function AppLayout({
       <Sidebar/>
 
       <div className="flex flex-1 flex-col">
-        {/* <Header/> */}
+        <Header/>
 
         <main className="flex-1">
           {children}
