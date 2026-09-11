@@ -54,7 +54,7 @@ export async function signUpAction(
   _prev: AuthState,
   formData: FormData,
 ): Promise<AuthState> {
-  const parsed = SignInSchema.safeParse({
+  const parsed = SignUpSchema.safeParse({
     name: formData.get("name"),
     email: formData.get("email"),
     password: formData.get("password"),
@@ -64,17 +64,17 @@ export async function signUpAction(
     return { error: parsed.error.issues[0].message ?? "Invalid input" };
   }
 
-  const { limited } = await checkRateLimit(`signIn:${parsed.data.email}`);
+  const { limited } = await checkRateLimit(`signUp:${parsed.data.email}`);
   if (limited) return { error: "Too many requests. Please wait." };
 
-  const result = await auth.api.signInEmail({
+  const result = await auth.api.signUpEmail({
     body: parsed.data,
     headers: await headers(),
     asResponse: false,
   });
 
   if (!result || "code" in result) {
-    return { error: "Invalid email or password" };
+    return { error: "Could not create account" };
   }
 
   redirect("/dashboard");
