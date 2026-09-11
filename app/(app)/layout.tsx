@@ -1,3 +1,4 @@
+import { Sidebar } from "@/components/layout/sidebar";
 import { requireSession } from "@/lib/session";
 
 export default async function AppLayout({
@@ -9,7 +10,7 @@ export default async function AppLayout({
 
   return (
     <div className="flex min-h-screen">
-      {/* <Sidebar/> */}
+      <Sidebar/>
 
       <div className="flex flex-1 flex-col">
         {/* <Header/> */}
