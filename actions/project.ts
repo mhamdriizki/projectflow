@@ -114,6 +114,7 @@ export async function addMember(
   const parsed = AddMemberSchema.safeParse({
     email: formData.get("email"),
   });
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message }
 
   // 3. Validasai user exist?
   const invitedUser = await prisma.user.findUnique({
