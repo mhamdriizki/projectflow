@@ -2,16 +2,9 @@ import { requiredProjectMember } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 import { checkRateLimit } from "@/lib/ratelimit";
 import { requireSession } from "@/lib/session";
-import { ProjectActionState } from "@/types/project";
+import { CreateProjectSchema, UpdateProjectSchema, type ProjectActionState } from "@/types/project";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import z from "zod";
-
-const CreateProjectSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  description: z.string().optional(),
-  color: z.string().optional(),
-});
 
 export async function createProject(
   _prev: ProjectActionState,
@@ -52,7 +45,7 @@ export async function updateProject(
 ): Promise<ProjectActionState> {
   await requiredProjectMember(projectId);
 
-  const parsed = CreateProjectSchema.safeParse({
+  const parsed = UpdateProjectSchema.safeParse({
     name: formData.get("name"),
     description: formData.get("description") || undefined,
     color: formData.get("color") || undefined,
