@@ -114,7 +114,7 @@ export async function addMember(
   const parsed = AddMemberSchema.safeParse({
     email: formData.get("email"),
   });
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message }
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message };
 
   // 3. Validasai user exist?
   const invitedUser = await prisma.user.findUnique({
@@ -130,15 +130,25 @@ export async function addMember(
 
   // 5. Not duplicate
   const existing = await prisma.membership.findUnique({
-    where: { userId_projectId: {userId: invitedUser.id, projectId}}
-  })
-  if (existing) return { error: "This user is already a member" }
+    where: { userId_projectId: { userId: invitedUser.id, projectId } },
+  });
+  if (existing) return { error: "This user is already a member" };
 
   // 6. Execute
   await prisma.membership.create({
-    data: { userId: invitedUser.id, projectId }
-  })
+    data: { userId: invitedUser.id, projectId },
+  });
 
-  revalidatePath(`/projects/${projectId}`)
-  return {}
+  revalidatePath(`/projects/${projectId}`);
+  return {};
+}
+
+export async function archiveProject(projectId: string): Promise<void> {
+  await requiredProjectMember(projectId);
+  await prisma.project.update({
+    where: { id: projectId },
+    data: { archived: true },
+  });
+  revalidatePath("/projects");
+  redirect("/projects");
 }
