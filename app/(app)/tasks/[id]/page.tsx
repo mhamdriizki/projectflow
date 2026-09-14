@@ -10,7 +10,7 @@ import { notFound } from "next/navigation";
 
 async function getTask(taskId: string, userId: string) {
   return prisma.task.findFirst({
-    where: { id: taskId, projet: { members: { some: { userId } } } },
+    where: { id: taskId, project: { members: { some: { userId } } } },
     include: {
       project: { include: { members: { include: { user: true } } } },
       assignee: true,

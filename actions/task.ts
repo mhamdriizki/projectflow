@@ -2,7 +2,13 @@
 
 import { requiredProjectMember } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
-import { TaskStatusEnum } from "@/types/task";
+import { checkRateLimit } from "@/lib/ratelimit";
+import { requireSession } from "@/lib/session";
+import {
+  CreateTaskSchema,
+  TaskActionState,
+  TaskStatusEnum,
+} from "@/types/task";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -69,4 +75,38 @@ export async function updateTaskAssignee(
 
   revalidatePath(`/projects/${task.projectId}`);
   revalidatePath(`/tasks/${taskId}`);
+}
+
+export async function createTask(
+  _prev: TaskActionState,
+  formData: FormData,
+): Promise<TaskActionState> {
+  const session = await requireSession();
+
+  const { limited } = await checkRateLimit(`create task:${session.user.id}`);
+  if (limited) return { error: "Too many requests, please wait." };
+
+  const parsed = CreateTaskSchema.safeParse({
+    projectId: formData.get("projectId"),
+    title: formData.get("title"),
+    description: formData.get("description") || undefined,
+    status: formData.get("status") || undefined,
+    priority: formData.get("priority") || undefined,
+    dueDate: formData.get("dueDate") || undefined,
+    assigneeId: formData.get("assigneeId") || undefined,
+  });
+  if (!parsed.success) return { error: parsed.error.issues[0].message };
+
+  await requiredProjectMember(parsed.data.projectId);
+
+  const { dueDate, ...rest } = parsed.data;
+  const task = await prisma.task.create({
+    data: {
+      ...rest,
+      dueDate: dueDate ? new Date(dueDate) : undefined,
+    },
+  });
+
+  revalidatePath(`/projects/${parsed.data.projectId}`);
+  redirect(`/tasks/${task.id}`);
 }

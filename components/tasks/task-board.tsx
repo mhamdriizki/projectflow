@@ -4,7 +4,7 @@ import { updateTaskStatus } from "@/actions/task";
 import Link from "next/link";
 import { useOptimistic, useTransition } from "react";
 import { Badge } from "../ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 type TaskStatus = "TODO" | "IN_PROGRESS" | "DONE";
 type PriorityStatus = 'LOW' | 'MEDIUM' | 'HIGH';
@@ -17,7 +17,7 @@ type Task = {
   assignee: {name: string} | null;
 }
 
-const COLUMNS = { status: TaskStatus; label: string}[] = [
+const COLUMNS: { status: TaskStatus, label: string}[] = [
   { status: "TODO", label: "To Do"},
   { status: "IN_PROGRESS", label: "In Progress" },
   { status: "DONE", label: "Done" }
