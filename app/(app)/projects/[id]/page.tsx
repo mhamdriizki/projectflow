@@ -6,6 +6,10 @@ import { prisma } from "@/lib/prisma";
 import { requireSession } from "@/lib/session";
 import { removeMember } from "@/actions/project";
 import { AddMemberDialog } from "@/components/projects/add-member-dialog";
+import { CreateTaskDialog } from "@/components/tasks/create-task-dialog";
+import { TaskBoard } from "@/components/tasks/task-board";
+import { TaskTable } from "@/components/tasks/task-table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Settings, X } from "lucide-react";
 
@@ -20,6 +24,7 @@ const getProject = cache(async (projectId: string, userId: string) => {
     where: { id: projectId, members: { some: { userId } } },
     include: {
       members: { include: { user: true }, orderBy: { createdAt: "asc" } },
+      tasks: { include: { assignee: true }, orderBy: { createdAt: "asc" } },
       _count: { select: { tasks: true } },
     },
   });
@@ -101,6 +106,28 @@ export default async function ProjectDetailPage({
             );
           })}
         </ul>
+      </section>
+
+      <section className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="font-medium">Tasks ({project.tasks.length})</h2>
+          <CreateTaskDialog
+            projectId={project.id}
+            members={project.members.map((m) => ({ userId: m.userId, name: m.user.name }))}
+          />
+        </div>
+        <Tabs defaultValue="board">
+          <TabsList>
+            <TabsTrigger value="board">Board</TabsTrigger>
+            <TabsTrigger value="table">Table</TabsTrigger>
+          </TabsList>
+          <TabsContent value="board">
+            <TaskBoard tasks={project.tasks} />
+          </TabsContent>
+          <TabsContent value="table">
+            <TaskTable tasks={project.tasks} />
+          </TabsContent>
+        </Tabs>
       </section>
     </main>
   );
