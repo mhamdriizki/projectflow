@@ -17,7 +17,8 @@ export function proxy(request: NextRequest) {
   }
 
   const isAuthPage = AUTH_PAGES.some((prefix) => pathname.startsWith(prefix));
-  if (isAuthPage && sessionCookie) {
+  const isRoot = pathname === "/";
+  if ((isAuthPage || isRoot) && sessionCookie) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
@@ -25,5 +26,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/projects/:path*", "/tasks/:path*", "/profile/:path*", "/login", "/register"],
+  matcher: ["/dashboard/:path*", "/projects/:path*", "/tasks/:path*", "/profile/:path*", "/login", "/register", "/"],
 };
