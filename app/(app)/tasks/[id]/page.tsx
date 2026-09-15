@@ -5,6 +5,9 @@ import { prisma } from "@/lib/prisma";
 import { requireSession } from "@/lib/session";
 import { deleteTask } from "@/actions/task";
 import { AssigneeSelect } from "@/components/tasks/assignee-select";
+import { CommentForm } from "@/components/tasks/comment-form";
+import { CommentList } from "@/components/tasks/comment-list";
+import { AttachmentUpload } from "@/components/uploads/attachment-upload";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
@@ -86,8 +89,32 @@ export default async function TaskDetailPage({
       </div>
 
       <section className="space-y-2">
+        <h2 className="font-medium">
+          Attachments{task.attachments.length > 0 && ` (${task.attachments.length})`}
+        </h2>
+        {task.attachments.length > 0 && (
+          <ul className="space-y-1">
+            {task.attachments.map((a) => (
+              <li key={a.id}>
+                <a
+                  href={a.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-primary hover:underline"
+                >
+                  {a.filename}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+        <AttachmentUpload taskId={task.id} />
+      </section>
+
+      <section className="space-y-4">
         <h2 className="font-medium">Comments ({task.comments.length})</h2>
-        <p className="text-sm text-muted-foreground">Dibahas di Bab 7.</p>
+        <CommentList comments={task.comments} currentUserId={session.user.id} />
+        <CommentForm taskId={task.id} />
       </section>
     </main>
   );

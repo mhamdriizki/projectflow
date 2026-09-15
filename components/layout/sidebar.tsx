@@ -8,12 +8,24 @@ import { signOutAction } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 
-export function Sidebar() {
+type SidebarUser = { name: string; image: string | null };
+
+export function Sidebar({ user }: { user: SidebarUser }) {
   const pathname = usePathname();
 
   return (
     <aside className="hidden md:flex w-56 shrink-0 flex-col border-r bg-sidebar text-sidebar-foreground">
-      <div className="p-4 text-lg font-bold">ProjectFlow</div>
+      <div className="flex items-center gap-2 p-4">
+        {user.image ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={user.image} alt={user.name} className="size-8 rounded-full object-cover" />
+        ) : (
+          <div className="flex size-8 items-center justify-center rounded-full bg-sidebar-accent text-sm font-medium">
+            {user.name.charAt(0).toUpperCase()}
+          </div>
+        )}
+        <span className="text-lg font-bold">ProjectFlow</span>
+      </div>
       <nav className="flex-1 space-y-1 px-2">
         {navLinks.map(({ href, label, icon: Icon }) => {
           const active = pathname.startsWith(href);
