@@ -19,8 +19,8 @@ type Task = {
 const STATUS_LABEL: Record<TaskStatus, string> = {
   TODO: "To Do",
   IN_PROGRESS: "In Progress",
-  DONE: "Done",
-};
+  DONE: "Done"
+}
 
 export function TaskTable({ tasks }: { tasks: Task[] }) {
   const [statusFilter, setStatusFilter] = useState<TaskStatus | "ALL">("ALL");
@@ -63,12 +63,15 @@ export function TaskTable({ tasks }: { tasks: Task[] }) {
                   </Link>
                 </td>
                 <td className="px-4 py-2">{STATUS_LABEL[task.status]}</td>
+
+                <td className="px-4 py-2 text-muted-foreground">{task.assignee?.name ?? "-"}</td>
+                
                 <td className="px-4 py-2">
                   <Badge variant={task.priority === "HIGH" ? "destructive" : "secondary"}>
                     {task.priority}
                   </Badge>
                 </td>
-                <td className="px-4 py-2 text-muted-foreground">{task.assignee?.name ?? "—"}</td>
+
                 <td className="px-4 py-2 text-muted-foreground">
                   {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : "—"}
                 </td>

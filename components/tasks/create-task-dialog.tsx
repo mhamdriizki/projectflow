@@ -54,21 +54,59 @@ export function CreateTaskDialog({
             <Label htmlFor="description">Description</Label>
             <Textarea id="description" name="description" rows={3} />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="assigneeId">Assignee</Label>
-            <select
-              id="assigneeId"
-              name="assigneeId"
-              defaultValue=""
-              className="flex h-8 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm"
-            >
-              <option value="">Unassigned</option>
-              {members.map((m) => (
-                <option key={m.userId} value={m.userId}>
-                  {m.name}
-                </option>
-              ))}
-            </select>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="status">Status</Label>
+              <select
+                name="status"
+                id="status"
+                defaultValue="TODO"
+                className="flex h-8 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm"
+              >
+                <option value="TODO">To Do</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="DONE">Done</option>
+              </select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="priority">Priority</Label>
+              <select
+                name="priority"
+                id="priority"
+                defaultValue="MEDIUM"
+                className="flex h-8 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm"
+              >
+                <option value="LOW">Low</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="HIGH">High</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="dueDate">Due date</Label>
+              <Input id="dueDate" name="dueDate" type="date" />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="assignee">Assignee</Label>
+              <select
+                name="assigneeId"
+                id="assigneeId"
+                defaultValue=""
+                className="flex h-8 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm"
+              >
+                <option value="">Unassigned</option>
+                {members.map((m) => (
+                  <option value={m.userId} key={m.userId}>
+                    {m.name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
           {state.error && <p className="text-sm text-destructive">{state.error}</p>}
           <DialogFooter>

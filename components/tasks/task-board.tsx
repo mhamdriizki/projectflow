@@ -62,7 +62,10 @@ export function TaskBoard({ tasks }: { tasks: Task[] }) {
             <div className="space-y-2">
               {columnTasks.map((task) => (
                 <div key={task.id} className="space-y-2 rounded-lg border p-3">
-                  <Link href={`/tasks/${task.id}`} className="text-sm font-medium hover:underline">
+                  <Link
+                    href={`/tasks/${task.id}`}
+                    className="text-sm font-medium hover:underline"
+                  >
                     {task.title}
                   </Link>
                   <div className="flex items-center justify-between gap-2">
