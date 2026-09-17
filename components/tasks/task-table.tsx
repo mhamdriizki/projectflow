@@ -49,8 +49,8 @@ export function TaskTable({ tasks }: { tasks: Task[] }) {
             <tr>
               <th className="px-4 py-2 font-medium">Title</th>
               <th className="px-4 py-2 font-medium">Status</th>
-              <th className="px-4 py-2 font-medium">Assignee</th>
               <th className="px-4 py-2 font-medium">Priority</th>
+              <th className="px-4 py-2 font-medium">Assignee</th>
               <th className="px-4 py-2 font-medium">Due Date</th>
             </tr>
           </thead>
