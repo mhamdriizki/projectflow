@@ -1,5 +1,7 @@
 import { deleteTask } from "@/actions/task";
 import { AssigneeSelect } from "@/components/tasks/assignee-select";
+import { CommentForm } from "@/components/tasks/comment-form";
+import { CommentList } from "@/components/tasks/comment-list";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
@@ -90,7 +92,8 @@ export default async function TaskDetailPage({
 
       <section className="space-y-2">
         <h2 className="font-medium">Comments ({task.comments.length})</h2>
-        <p className="text-sm text-muted-foreground">Akan dibahas di bab 7</p>
+        <CommentList comments={task.comments} currentUserId={session.user.id} />
+        <CommentForm taskId={task.id} />
       </section>
     </main>
   );

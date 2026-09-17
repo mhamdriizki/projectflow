@@ -18,3 +18,8 @@ export const UpdateTaskSchema = CreateTaskSchema.omit({ projectId: true }).parti
 export type TaskActionState = {
   error?: string
 }
+
+export const CreateCommentSchema = z.object({
+  body: z.string().min(1, "Comment cannot be empty").max(2000, "Comment is too long"),
+  taskId: z.string().min(1)
+})
