@@ -1,3 +1,4 @@
+import { AvatarUpload } from "@/components/upload/avatar-upload";
 import { requireSession } from "@/lib/session";
 import { Metadata } from "next";
 
@@ -9,6 +10,7 @@ export default async function ProfilePage() {
   return (
     <main className="p-8">
       <h1 className="text-2xl font-bold">Profile</h1>
+      <AvatarUpload initialUrl={session.user.image ?? null} name={session.user.name}/>
       <p className="text-muted-foreground">{session?.user?.name} - {session?.user?.email}</p>
     </main>
   )

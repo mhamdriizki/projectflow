@@ -7,19 +7,20 @@ export default async function AppLayout({
 }: {
   children: React.ReactNode;
 }) {
-  await requireSession();
+  const session = await requireSession();
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar/>
+      {/* Update sidebar untuk tampilin si foto user */}
+      <Sidebar
+        user={{ name: session.user.name, image: session.user.image ?? null }}
+      />
 
       <div className="flex flex-1 flex-col">
-        <Header/>
+        <Header />
 
-        <main className="flex-1">
-          {children}
-        </main>
+        <main className="flex-1">{children}</main>
       </div>
     </div>
-  )
+  );
 }
