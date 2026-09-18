@@ -43,7 +43,7 @@ export async function getTasksByStatus(userId: string) {
   );
 }
 
-export async function getCompletionOverTime(userId: string, days: 30) {
+export async function getCompletionOverTime(userId: string, days = 30) {
   const since = new Date();
   since.setDate(since.getDate() - (days - 1));
   since.setHours(0, 0, 0, 0);
