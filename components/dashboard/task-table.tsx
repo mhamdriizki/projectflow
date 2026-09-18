@@ -39,7 +39,7 @@ const columns: ColumnDef<LegacyFeatures, Task, any>[] = [
   }),
   columnHelper.accessor("status", {
     header: ({ column }) => (
-      <button className='flex items-center gap-1 text-xs font-medium' onClick={() => column.toggleGrouping()}>
+      <button className='flex items-center gap-1 text-xs font-medium' onClick={column.getToggleSortingHandler()}>
         Status <ArrowUpDown className='h-3 w-3' />
       </button>
     ),
@@ -47,7 +47,7 @@ const columns: ColumnDef<LegacyFeatures, Task, any>[] = [
   }),
   columnHelper.accessor("priority", {
     header: ({ column }) => (
-      <button className='flex items-center gap-1 text-xs font-medium' onClick={() => column.toggleGrouping()}>
+      <button className='flex items-center gap-1 text-xs font-medium' onClick={column.getToggleSortingHandler()}>
         Priority <ArrowUpDown className='h-3 w-3' />
       </button>
     ),
@@ -58,7 +58,7 @@ const columns: ColumnDef<LegacyFeatures, Task, any>[] = [
   }),
   columnHelper.accessor("dueDate", {
     header: ({ column }) => (
-      <button className='flex items-center gap-1 text-xs font-medium' onClick={() => column.toggleGrouping()}>
+      <button className='flex items-center gap-1 text-xs font-medium' onClick={column.getToggleSortingHandler()}>
         Due <ArrowUpDown className='h-3 w-3' />
       </button>
     ),

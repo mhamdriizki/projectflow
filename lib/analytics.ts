@@ -57,23 +57,24 @@ export async function getCompletionOverTime(userId: string, days = 30) {
     select: { updatedAt: true },
   });
 
-  const counts = new Map<string, number>();
+  const localKey = (d: Date) => d.toLocaleDateString("en-CA");
+  const counts = new Map<string, { label: string; count: number }>();
   for (let i = 0; i < days; i++) {
     const d = new Date(since);
     d.setDate(d.getDate() + i);
-    counts.set(d.toISOString().slice(0, 10), 0);
+    counts.set(localKey(d), {
+      label: d.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+      count: 0,
+    });
   }
 
   for (const task of completed) {
-    const key = task.updatedAt.toISOString().slice(0, 10);
-    if (counts.has(key)) counts.set(key, (counts.get(key) ?? 0) + 1);
+    const entry = counts.get(localKey(task.updatedAt));
+    if (entry) entry.count++;
   }
 
-  return Array.from(counts.entries()).map(([date, count]) => ({
-    date: new Date(date).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-    }),
+  return Array.from(counts.values()).map(({ label, count }) => ({
+    date: label,
     count,
   }));
 }
