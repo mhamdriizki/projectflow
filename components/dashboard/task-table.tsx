@@ -1,7 +1,7 @@
 'use client'
 
 import { getCoreRowModel, getFilteredRowModel, getSortedRowModel, legacyCreateColumnHelper, useLegacyTable, type LegacyFeatures } from '@tanstack/react-table/legacy';
-import { flexRender, type SortingState } from '@tanstack/react-table';
+import { ColumnDef, flexRender, type SortingState } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 import Link from 'next/link';
 import { Badge } from '../ui/badge';
